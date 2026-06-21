@@ -82,7 +82,7 @@ export default function App() {
       title: "Cold Water Wash",
       description:
         "About 80% of the energy used by a washing machine goes toward heating the water. Switch to cold water for a month.",
-      image: "/assets/cold_water_wash.png",
+      image: "assets/cold_water_wash.png",
       status: "idle",
       xpAward: 150,
       avatars: [
@@ -96,7 +96,7 @@ export default function App() {
       title: "Car-Free Tuesday",
       description:
         "Commit to using public transit, biking, or walking for all your commutes this coming Tuesday. Small builds big impacts.",
-      image: "/assets/car_free_tuesday.png",
+      image: "assets/car_free_tuesday.png",
       status: "idle",
       xpAward: 200,
     },
@@ -105,7 +105,7 @@ export default function App() {
       title: "Switch to LED Bulbs",
       description:
         "Replacing your home's 5 light fixtures or bulbs kit with models that have earned the Energy Star.",
-      image: "/assets/led_bulbs.png",
+      image: "assets/led_bulbs.png",
       status: "idle",
       xpAward: 250,
       stat: "~15kg CO2e/yr",
@@ -115,7 +115,7 @@ export default function App() {
       title: "Plant-Based Weekend",
       description:
         "Meat production is a significant driver of emissions. Commit to 100% plant-based meals this Saturday and Sunday.",
-      image: "/assets/plant_based_weekend.png",
+      image: "assets/plant_based_weekend.png",
       status: "idle",
       xpAward: 180,
       avatars: [

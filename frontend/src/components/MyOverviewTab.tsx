@@ -27,7 +27,7 @@ export const MyOverviewTab = React.memo(function MyOverviewTab({
         <div className="card-row-dashboard-top">
           <div
             className="glass-card emissions-card"
-            style={{ backgroundImage: "url('/assets/eco_island.png')" }}
+            style={{ backgroundImage: "url('assets/eco_island.png')" }}
           >
             <div className="emissions-card-bg-overlay"></div>
             <div className="emissions-content">
@@ -180,7 +180,7 @@ export const MyOverviewTab = React.memo(function MyOverviewTab({
         <div className="card-row-dashboard-top">
           <div
             className="glass-card blurry-card"
-            style={{ backgroundImage: "url('/assets/eco_island.png')" }}
+            style={{ backgroundImage: "url('assets/eco_island.png')" }}
           >
             <div className="blur-overlay"></div>
             <div className="blur-card-text">
@@ -193,7 +193,7 @@ export const MyOverviewTab = React.memo(function MyOverviewTab({
             <div
               className="glass-card blurry-card"
               style={{
-                backgroundImage: "url('/assets/leaf_glow_chart.png')",
+                backgroundImage: "url('assets/leaf_glow_chart.png')",
                 minHeight: "150px",
               }}
             >

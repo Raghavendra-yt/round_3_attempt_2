@@ -317,7 +317,7 @@ export const ActivityLogTab = React.memo(function ActivityLogTab({
         {/* Bottom Full Width Impact Banner */}
         <div
           className="glass-card impact-banner-card"
-          style={{ backgroundImage: "url('/assets/car_free_tuesday.png')" }}
+          style={{ backgroundImage: "url('assets/car_free_tuesday.png')" }}
         >
           <div className="impact-banner-bg-overlay"></div>
           <div className="impact-banner-content">
