@@ -6,7 +6,14 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, Path
 
 from app.deps import get_repository
-from app.models import ActivityLog, ActivityLogCreate, ChallengeState, ChallengeUpdate, StreakUpdate, UserProfile
+from app.models import (
+    ActivityLog,
+    ActivityLogCreate,
+    ChallengeState,
+    ChallengeUpdate,
+    StreakUpdate,
+    UserProfile,
+)
 from app.repository.base import Repository
 
 router = APIRouter(prefix="/api/dashboard", tags=["Dashboard"])

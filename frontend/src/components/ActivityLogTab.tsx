@@ -169,9 +169,7 @@ export const ActivityLogTab = React.memo(function ActivityLogTab({
                         value={utilityUsage}
                         onChange={(e) => setUtilityUsage(e.target.value)}
                       />
-                      <span className="input-suffix">
-                        {utilityType === "Water" ? "m³" : "kWh"}
-                      </span>
+                      <span className="input-suffix">{utilityType === "Water" ? "m³" : "kWh"}</span>
                     </div>
                   </div>
                 </>
@@ -240,7 +238,9 @@ export const ActivityLogTab = React.memo(function ActivityLogTab({
                 <tbody>
                   {loggedActivities.map((log) => (
                     <tr key={log.id}>
-                      <td className="log-date" data-label="Date">{log.date}</td>
+                      <td className="log-date" data-label="Date">
+                        {log.date}
+                      </td>
                       <td data-label="Category">
                         <span className={`log-badge ${log.category}`}>
                           {log.category === "transport" ? (
@@ -281,8 +281,12 @@ export const ActivityLogTab = React.memo(function ActivityLogTab({
                           <span style={{ textTransform: "capitalize" }}>{log.category}</span>
                         </span>
                       </td>
-                      <td className="log-activity" data-label="Activity">{log.activity}</td>
-                      <td className="log-impact" data-label="Impact">{log.impact.toFixed(1)}</td>
+                      <td className="log-activity" data-label="Activity">
+                        {log.activity}
+                      </td>
+                      <td className="log-impact" data-label="Impact">
+                        {log.impact.toFixed(1)}
+                      </td>
                       <td data-label="Actions">
                         <button
                           className="btn-log-action"

@@ -5,10 +5,11 @@ interface ApiError extends Error {
   status: number;
 }
 
-const isStaticHost = typeof window !== "undefined" && (
-  window.location.hostname.endsWith("github.io") || 
-  window.location.hostname.includes("localhost") === false && window.location.hostname.includes("127.0.0.1") === false
-);
+const isStaticHost =
+  typeof window !== "undefined" &&
+  (window.location.hostname.endsWith("github.io") ||
+    (window.location.hostname.includes("localhost") === false &&
+      window.location.hostname.includes("127.0.0.1") === false));
 
 // Local storage keys
 const PROFILE_KEY_PREFIX = "carbon_profile_";
@@ -136,7 +137,11 @@ export async function logActivity(
     const profile = getLocalProfile(deviceId);
     const newLog: ActivityLog = {
       id: "log-" + Math.random().toString(36).substring(2, 11),
-      date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
+      date: new Date().toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
       device_id: deviceId,
       ...activity,
     };
@@ -159,7 +164,11 @@ export async function logActivity(
     const profile = getLocalProfile(deviceId);
     const newLog: ActivityLog = {
       id: "log-" + Math.random().toString(36).substring(2, 11),
-      date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
+      date: new Date().toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
       device_id: deviceId,
       ...activity,
     };
@@ -214,7 +223,7 @@ export async function updateChallenge(
     const profile = getLocalProfile(deviceId);
     profile.challenges[challengeId] = {
       id: challengeId,
-      status: status as any,
+      status: status as "active" | "completed",
       progress,
     };
     saveLocalProfile(deviceId, profile);
@@ -233,7 +242,7 @@ export async function updateChallenge(
     const profile = getLocalProfile(deviceId);
     profile.challenges[challengeId] = {
       id: challengeId,
-      status: status as any,
+      status: status as "active" | "completed",
       progress,
     };
     saveLocalProfile(deviceId, profile);

@@ -1,4 +1,3 @@
-
 interface ToastNotificationProps {
   message: string | null;
 }

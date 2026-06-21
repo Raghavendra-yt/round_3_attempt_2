@@ -140,4 +140,3 @@ def test_dashboard_update_challenge(client):
     p = resp.json()
     assert p["challenges"]["cold-water"]["status"] == "completed"
     assert p["challenges"]["cold-water"]["progress"] == 100
-

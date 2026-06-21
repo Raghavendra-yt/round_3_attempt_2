@@ -136,6 +136,13 @@ body {
   border: 1px solid transparent;
 }
 
+button.nav-item {
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+}
+
 .nav-item svg {
   width: 20px;
   height: 20px;
@@ -1105,6 +1112,13 @@ body {
   transition: var(--transition);
 }
 
+button.quick-log-pill {
+  font-family: inherit;
+  text-align: left;
+  color: inherit;
+  width: 100%;
+}
+
 .quick-log-pill:hover {
   transform: translateY(-2px);
   border-color: var(--border-active);
@@ -1559,7 +1573,9 @@ body {
 /* Mobile-First Adjustments */
 @media (max-width: 768px) {
   /* Prevent horizontal scrolling on outer container */
-  body, html, .dashboard-container {
+  body,
+  html,
+  .dashboard-container {
     overflow-x: hidden;
     max-width: 100%;
   }
@@ -1755,4 +1771,3 @@ body {
   text-transform: uppercase;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-

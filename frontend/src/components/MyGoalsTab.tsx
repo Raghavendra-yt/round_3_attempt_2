@@ -33,8 +33,8 @@ export const MyGoalsTab = React.memo(function MyGoalsTab({
       <header className="dashboard-header">
         <h1>Animated Insights &amp; Habits</h1>
         <p>
-          Discover actionable ways to reduce your carbon footprint and build sustainable
-          routines. Small changes lead to massive impact.
+          Discover actionable ways to reduce your carbon footprint and build sustainable routines.
+          Small changes lead to massive impact.
         </p>
       </header>
 
@@ -56,9 +56,7 @@ export const MyGoalsTab = React.memo(function MyGoalsTab({
                 </svg>
                 <h3 className="streak-card-title">Current Streak</h3>
               </div>
-              <p className="streak-card-sub">
-                Keep logging activities to maintain your momentum.
-              </p>
+              <p className="streak-card-sub">Keep logging activities to maintain your momentum.</p>
             </div>
 
             <div className="streak-content-wrapper">
@@ -162,11 +160,7 @@ export const MyGoalsTab = React.memo(function MyGoalsTab({
             <div key={challenge.id} className="challenge-card">
               <div className="challenge-card-img-wrapper">
                 <span className="ai-badge">AI Recommendations</span>
-                <img
-                  src={challenge.image}
-                  alt={challenge.title}
-                  className="challenge-card-img"
-                />
+                <img src={challenge.image} alt={challenge.title} className="challenge-card-img" />
               </div>
               <div className="challenge-card-content">
                 <div>

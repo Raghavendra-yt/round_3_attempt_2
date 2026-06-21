@@ -283,31 +283,44 @@ export const MyOverviewTab = React.memo(function MyOverviewTab({
 
         <h2 className="quick-log-section-title">Quick Log</h2>
         <div className="quick-log-grid">
-          <div className="quick-log-pill" onClick={() => handleQuickLog("Logged a walk", 0.9)}>
+          <button
+            type="button"
+            className="quick-log-pill"
+            onClick={() => handleQuickLog("Logged a walk", 0.9)}
+          >
             <div className="pill-info">
               <span className="pill-title">Logged a walk</span>
               <span className="pill-co2">-0.9 kg CO2e</span>
             </div>
             <div className="pill-plus">+</div>
-          </div>
+          </button>
 
-          <div className="quick-log-pill" onClick={() => handleQuickLog("Ate vegan meal", 3.7)}>
+          <button
+            type="button"
+            className="quick-log-pill"
+            onClick={() => handleQuickLog("Ate vegan meal", 3.7)}
+          >
             <div className="pill-info">
               <span className="pill-title">Ate vegan</span>
               <span className="pill-co2">-3.7 kg CO2e</span>
             </div>
             <div className="pill-plus">+</div>
-          </div>
+          </button>
 
-          <div className="quick-log-pill" onClick={() => handleQuickLog("Recycled waste", 0.6)}>
+          <button
+            type="button"
+            className="quick-log-pill"
+            onClick={() => handleQuickLog("Recycled waste", 0.6)}
+          >
             <div className="pill-info">
               <span className="pill-title">Recycled</span>
               <span className="pill-co2">-0.6 kg CO2e</span>
             </div>
             <div className="pill-plus">+</div>
-          </div>
+          </button>
 
-          <div
+          <button
+            type="button"
             className="quick-log-pill quick-log-full-width"
             onClick={() => handleQuickLog("Second-hand clothing shopping", 2.8)}
           >
@@ -316,7 +329,7 @@ export const MyOverviewTab = React.memo(function MyOverviewTab({
               <span className="pill-co2">-2.8 kg CO2e</span>
             </div>
             <div className="pill-plus">+</div>
-          </div>
+          </button>
         </div>
       </section>
     </main>

@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useEffect, useCallback, useMemo } from "react";
 
 import { fetchProfile, fetchActivities, logActivity } from "./lib/api";
@@ -137,195 +134,222 @@ export default function App() {
   }, []);
 
   // Handle XP addition and Level up check
-  const addXp = useCallback((amount: number) => {
-    setProfile((prev) => {
-      if (!prev) return prev;
-      const newXp = prev.xp + amount;
-      const newLevel = newXp >= prev.level * 100 ? prev.level + 1 : prev.level;
-      const finalXp = newLevel > prev.level ? 0 : newXp;
-      if (newLevel > prev.level) {
-        triggerToast(`🎉 LEVEL UP! You are now Level ${newLevel}!`);
-      }
-      return { ...prev, xp: finalXp, level: newLevel };
-    });
-  }, [triggerToast]);
+  const addXp = useCallback(
+    (amount: number) => {
+      setProfile((prev) => {
+        if (!prev) return prev;
+        const newXp = prev.xp + amount;
+        const newLevel = newXp >= prev.level * 100 ? prev.level + 1 : prev.level;
+        const finalXp = newLevel > prev.level ? 0 : newXp;
+        if (newLevel > prev.level) {
+          triggerToast(`🎉 LEVEL UP! You are now Level ${newLevel}!`);
+        }
+        return { ...prev, xp: finalXp, level: newLevel };
+      });
+    },
+    [triggerToast],
+  );
 
   // Toggle streak checkmarks (Targets view)
-  const handleDayClick = useCallback((index: number) => {
-    const updated = [...checkedDays];
-    updated[index] = !updated[index];
-    setCheckedDays(updated);
+  const handleDayClick = useCallback(
+    (index: number) => {
+      const updated = [...checkedDays];
+      updated[index] = !updated[index];
+      setCheckedDays(updated);
 
-    setProfile((prev) => {
-      if (!prev) return prev;
-      return { ...prev, streak: updated.filter(Boolean).length };
-    });
+      setProfile((prev) => {
+        if (!prev) return prev;
+        return { ...prev, streak: updated.filter(Boolean).length };
+      });
 
-    if (updated[index]) {
-      triggerToast(`Day logged! Keep up the momentum.`);
-      addXp(30);
-    } else {
-      triggerToast("Day unchecked.");
-    }
-  }, [checkedDays, addXp, triggerToast]);
+      if (updated[index]) {
+        triggerToast(`Day logged! Keep up the momentum.`);
+        addXp(30);
+      } else {
+        triggerToast("Day unchecked.");
+      }
+    },
+    [checkedDays, addXp, triggerToast],
+  );
 
   // Handle challenge buttons action
-  const handleChallengeAction = useCallback((id: string, xpAward: number, currentStatus: string) => {
-    setChallenges((prev) =>
-      prev.map((c) => {
-        if (c.id === id) {
-          let nextStatus: Challenge["status"] = "completed";
-          let actionLabel = "";
+  const handleChallengeAction = useCallback(
+    (id: string, xpAward: number, currentStatus: string) => {
+      setChallenges((prev) =>
+        prev.map((c) => {
+          if (c.id === id) {
+            let nextStatus: Challenge["status"] = "completed";
+            let actionLabel = "";
 
-          if (id === "cold-water") {
-            nextStatus = currentStatus === "idle" ? "started" : "completed";
-            actionLabel =
-              nextStatus === "started"
-                ? "Started Cold Water Wash Challenge!"
-                : "Completed Cold Water Wash! +150 XP";
-          } else if (id === "car-free") {
-            nextStatus = currentStatus === "idle" ? "accepted" : "completed";
-            actionLabel =
-              nextStatus === "accepted"
-                ? "Accepted Car-Free Tuesday!"
-                : "Completed Car-Free Tuesday! +200 XP";
-          } else if (id === "led-bulbs") {
-            nextStatus = "completed";
-            actionLabel = "Completed Switch to LED Bulbs! +250 XP";
-          } else if (id === "plant-based") {
-            nextStatus = currentStatus === "idle" ? "joined" : "completed";
-            actionLabel =
-              nextStatus === "joined"
-                ? "Joined Plant-Based Weekend!"
-                : "Completed Plant-Based Weekend! +180 XP";
+            if (id === "cold-water") {
+              nextStatus = currentStatus === "idle" ? "started" : "completed";
+              actionLabel =
+                nextStatus === "started"
+                  ? "Started Cold Water Wash Challenge!"
+                  : "Completed Cold Water Wash! +150 XP";
+            } else if (id === "car-free") {
+              nextStatus = currentStatus === "idle" ? "accepted" : "completed";
+              actionLabel =
+                nextStatus === "accepted"
+                  ? "Accepted Car-Free Tuesday!"
+                  : "Completed Car-Free Tuesday! +200 XP";
+            } else if (id === "led-bulbs") {
+              nextStatus = "completed";
+              actionLabel = "Completed Switch to LED Bulbs! +250 XP";
+            } else if (id === "plant-based") {
+              nextStatus = currentStatus === "idle" ? "joined" : "completed";
+              actionLabel =
+                nextStatus === "joined"
+                  ? "Joined Plant-Based Weekend!"
+                  : "Completed Plant-Based Weekend! +180 XP";
+            }
+
+            if (nextStatus === "completed") {
+              addXp(xpAward);
+            } else {
+              addXp(50);
+            }
+
+            triggerToast(actionLabel);
+            return { ...c, status: nextStatus };
           }
-
-          if (nextStatus === "completed") {
-            addXp(xpAward);
-          } else {
-            addXp(50);
-          }
-
-          triggerToast(actionLabel);
-          return { ...c, status: nextStatus };
-        }
-        return c;
-      }),
-    );
-  }, [addXp, triggerToast]);
+          return c;
+        }),
+      );
+    },
+    [addXp, triggerToast],
+  );
 
   // Dashboard Page Quick Log interaction handler
-  const handleQuickLog = useCallback(async (activityName: string, co2SavedKg: number) => {
-    const savedTons = co2SavedKg / 1000;
+  const handleQuickLog = useCallback(
+    async (activityName: string, co2SavedKg: number) => {
+      const savedTons = co2SavedKg / 1000;
 
-    // Log to backend
-    const act = await logActivity({
-      category: "transport", // defaults
-      activity: activityName,
-      impact: -co2SavedKg, // savings are negative impact
-    });
+      // Log to backend
+      const act = await logActivity({
+        category: "transport", // defaults
+        activity: activityName,
+        impact: -co2SavedKg, // savings are negative impact
+      });
 
-    setLoggedActivities((prev) => [act, ...prev]);
+      setLoggedActivities((prev) => [act, ...prev]);
 
-    setProfile((prev) => {
-      if (!prev) return prev;
-      const newEmissions =
-        Math.max(0.1, Number((prev.total_emissions / 1000 - savedTons).toFixed(4))) * 1000;
-      return { ...prev, total_emissions: newEmissions };
-    });
+      setProfile((prev) => {
+        if (!prev) return prev;
+        const newEmissions =
+          Math.max(0.1, Number((prev.total_emissions / 1000 - savedTons).toFixed(4))) * 1000;
+        return { ...prev, total_emissions: newEmissions };
+      });
 
-    addXp(40);
+      addXp(40);
 
-    setBreakdownPct((prev) => {
-      if (
-        activityName.toLowerCase().includes("walk") ||
-        activityName.toLowerCase().includes("transit")
-      ) {
-        return {
-          ...prev,
-          transport: Math.max(10, prev.transport - 2),
-          shopping: Math.min(30, prev.shopping + 1),
-          food: Math.min(30, prev.food + 1),
-        };
-      } else if (
-        activityName.toLowerCase().includes("vegan") ||
-        activityName.toLowerCase().includes("plant")
-      ) {
-        return {
-          ...prev,
-          food: Math.max(5, prev.food - 3),
-          homeEnergy: Math.min(45, prev.homeEnergy + 2),
-          transport: Math.min(50, prev.transport + 1),
-        };
-      } else if (activityName.toLowerCase().includes("recycled")) {
-        return {
-          ...prev,
-          shopping: Math.max(5, prev.shopping - 2),
-          food: Math.min(30, prev.food + 2),
-        };
-      }
-      return prev;
-    });
+      setBreakdownPct((prev) => {
+        if (
+          activityName.toLowerCase().includes("walk") ||
+          activityName.toLowerCase().includes("transit")
+        ) {
+          return {
+            ...prev,
+            transport: Math.max(10, prev.transport - 2),
+            shopping: Math.min(30, prev.shopping + 1),
+            food: Math.min(30, prev.food + 1),
+          };
+        } else if (
+          activityName.toLowerCase().includes("vegan") ||
+          activityName.toLowerCase().includes("plant")
+        ) {
+          return {
+            ...prev,
+            food: Math.max(5, prev.food - 3),
+            homeEnergy: Math.min(45, prev.homeEnergy + 2),
+            transport: Math.min(50, prev.transport + 1),
+          };
+        } else if (activityName.toLowerCase().includes("recycled")) {
+          return {
+            ...prev,
+            shopping: Math.max(5, prev.shopping - 2),
+            food: Math.min(30, prev.food + 2),
+          };
+        }
+        return prev;
+      });
 
-    triggerToast(`Logged: "${activityName}"! Saved ${co2SavedKg} kg CO2e. +40 XP`);
-  }, [addXp, triggerToast]);
+      triggerToast(`Logged: "${activityName}"! Saved ${co2SavedKg} kg CO2e. +40 XP`);
+    },
+    [addXp, triggerToast],
+  );
 
   // Activity Log Page submission handler
-  const handleSaveEntry = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSaveEntry = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    let activityText = "";
-    let calculatedImpact = 0;
+      let activityText = "";
+      let calculatedImpact = 0;
 
-    if (activeEntryTab === "transport") {
-      const distNum = parseFloat(distance) || 0;
-      let factor = 0.187; // Petrol Car default
-      if (vehicleType === "Diesel Car") factor = 0.175;
-      else if (vehicleType === "Electric Vehicle") factor = 0.05;
-      else if (vehicleType === "Motorcycle") factor = 0.11;
+      if (activeEntryTab === "transport") {
+        const distNum = parseFloat(distance) || 0;
+        let factor = 0.187; // Petrol Car default
+        if (vehicleType === "Diesel Car") factor = 0.175;
+        else if (vehicleType === "Electric Vehicle") factor = 0.05;
+        else if (vehicleType === "Motorcycle") factor = 0.11;
 
-      calculatedImpact = Number((distNum * factor).toFixed(1));
-      activityText = `${vehicleType} - ${distNum}km`;
-    } else if (activeEntryTab === "utilities") {
-      const usageNum = parseFloat(utilityUsage) || 0;
-      let factor = 0.34; // Electricity
-      if (utilityType === "Gas") factor = 0.2;
-      else if (utilityType === "Water") factor = 0.05;
+        calculatedImpact = Number((distNum * factor).toFixed(1));
+        activityText = `${vehicleType} - ${distNum}km`;
+      } else if (activeEntryTab === "utilities") {
+        const usageNum = parseFloat(utilityUsage) || 0;
+        let factor = 0.34; // Electricity
+        if (utilityType === "Gas") factor = 0.2;
+        else if (utilityType === "Water") factor = 0.05;
 
-      calculatedImpact = Number((utilityUsage) ? (usageNum * factor) : 0);
-      activityText = `${utilityType} - ${usageNum} ${utilityType === "Water" ? "m³" : "kWh"}`;
-    } else if (activeEntryTab === "food") {
-      let impact = 5.5; // Average Meat Diet
-      if (dietType === "Heavy Meat Diet") impact = 7.2;
-      else if (dietType === "Vegetarian") impact = 2.5;
-      else if (dietType === "Vegan") impact = 1.5;
+        calculatedImpact = Number(utilityUsage ? usageNum * factor : 0);
+        activityText = `${utilityType} - ${usageNum} ${utilityType === "Water" ? "m³" : "kWh"}`;
+      } else if (activeEntryTab === "food") {
+        let impact = 5.5; // Average Meat Diet
+        if (dietType === "Heavy Meat Diet") impact = 7.2;
+        else if (dietType === "Vegetarian") impact = 2.5;
+        else if (dietType === "Vegan") impact = 1.5;
 
-      calculatedImpact = impact;
-      activityText = dietType;
-    }
+        calculatedImpact = impact;
+        activityText = dietType;
+      }
 
-    const newLog = await logActivity({
-      category: activeEntryTab,
-      activity: activityText,
-      impact: calculatedImpact,
-    });
+      const newLog = await logActivity({
+        category: activeEntryTab,
+        activity: activityText,
+        impact: calculatedImpact,
+      });
 
-    setLoggedActivities((prev) => [newLog, ...prev]);
+      setLoggedActivities((prev) => [newLog, ...prev]);
 
-    setProfile((prev) => {
-      if (!prev) return prev;
-      return { ...prev, total_emissions: prev.total_emissions + calculatedImpact };
-    });
+      setProfile((prev) => {
+        if (!prev) return prev;
+        return { ...prev, total_emissions: prev.total_emissions + calculatedImpact };
+      });
 
-    addXp(50);
-    triggerToast(`Entry saved! Logged ${calculatedImpact} kg CO2e. +50 XP`);
-  }, [activeEntryTab, distance, vehicleType, utilityUsage, utilityType, dietType, addXp, triggerToast]);
+      addXp(50);
+      triggerToast(`Entry saved! Logged ${calculatedImpact} kg CO2e. +50 XP`);
+    },
+    [
+      activeEntryTab,
+      distance,
+      vehicleType,
+      utilityUsage,
+      utilityType,
+      dietType,
+      addXp,
+      triggerToast,
+    ],
+  );
 
   // Remove activity log
-  const handleRemoveLog = useCallback((id: string, impact: number) => {
-    setLoggedActivities((prev) => prev.filter((item) => item.id !== id));
-    triggerToast(`Removed log entry! Reduced today's impact by ${impact} kg CO2e.`);
-  }, [triggerToast]);
+  const handleRemoveLog = useCallback(
+    (id: string, impact: number) => {
+      setLoggedActivities((prev) => prev.filter((item) => item.id !== id));
+      triggerToast(`Removed log entry! Reduced today's impact by ${impact} kg CO2e.`);
+    },
+    [triggerToast],
+  );
 
   // Helper calculations for Levels (Targets view)
   const totalNeededForLevel = nextLevelXp - currentLevelMinXp;
