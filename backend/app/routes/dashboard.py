@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, Path
 
 from app.deps import get_repository
-from app.models import ActivityLog, ActivityLogCreate, UserProfile
+from app.models import ActivityLog, ActivityLogCreate, ChallengeState, ChallengeUpdate, StreakUpdate, UserProfile
 from app.repository.base import Repository
 
 router = APIRouter(prefix="/api/dashboard", tags=["Dashboard"])
@@ -60,3 +60,34 @@ def add_activity(
     repo.save_profile(profile)
 
     return log
+
+
+@router.put("/profile/{device_id}/streak", response_model=UserProfile)
+def update_streak(
+    payload: StreakUpdate,
+    device_id: str = Path(min_length=8, max_length=128, pattern=r"^[A-Za-z0-9_-]+$"),
+    repo: Repository = Depends(get_repository),
+) -> UserProfile:
+    """Update the user's streak."""
+    profile = repo.get_profile(device_id)
+    profile.streak = payload.streak
+    repo.save_profile(profile)
+    return profile
+
+
+@router.put("/profile/{device_id}/challenges/{challenge_id}", response_model=UserProfile)
+def update_challenge(
+    challenge_id: str,
+    payload: ChallengeUpdate,
+    device_id: str = Path(min_length=8, max_length=128, pattern=r"^[A-Za-z0-9_-]+$"),
+    repo: Repository = Depends(get_repository),
+) -> UserProfile:
+    """Update a challenge's state for the user."""
+    profile = repo.get_profile(device_id)
+    profile.challenges[challenge_id] = ChallengeState(
+        id=challenge_id,
+        status=payload.status,
+        progress=payload.progress,
+    )
+    repo.save_profile(profile)
+    return profile

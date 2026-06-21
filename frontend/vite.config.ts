@@ -7,7 +7,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base:
     process.env.GITHUB_PAGES === "true"
-      ? `/${process.env.REPOSITORY_NAME || "Prompt_wars_3_attempt_1"}/`
+      ? `/${process.env.REPOSITORY_NAME || "round_3_attempt_2"}/`
       : "/",
   plugins: [react()],
   server: {

@@ -24,3 +24,14 @@ export interface ActivityLog extends ActivityLogCreate {
   date: string;
   device_id: string;
 }
+
+export interface Challenge {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  status: "idle" | "started" | "joined" | "accepted" | "completed";
+  xpAward: number;
+  stat?: string;
+  avatars?: string[];
+}

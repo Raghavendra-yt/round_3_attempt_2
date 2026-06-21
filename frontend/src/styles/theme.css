@@ -11,7 +11,7 @@
   --border-active: rgba(186, 151, 98, 0.3);
 
   --text-main: #f1f5f3;
-  --text-muted: #8fa89b;
+  --text-muted: #a6c0b3;
   --text-gold: #e2c08d;
 
   --gold: #ba9762;
@@ -245,6 +245,7 @@ body {
   flex-grow: 1;
   padding: 3.5rem 4rem;
   max-width: 1100px;
+  transition: var(--transition);
 }
 
 .dashboard-header {
@@ -1526,18 +1527,232 @@ body {
   text-align: right;
 }
 
-/* Responsive Activity Adjustments */
-@media (max-width: 960px) {
-  .activity-grid {
-    grid-template-columns: 1fr;
+/* Responsive Layout Adjustments */
+
+/* Tablet Adjustments */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+    padding: 2rem 1rem;
+  }
+  .main-content {
+    margin-left: 200px;
+    padding: 2.5rem 2rem;
+  }
+  .logo-title {
+    font-size: 1.5rem;
+  }
+  .impact-banner-title {
+    font-size: 2rem;
+    max-width: 100%;
   }
   .impact-banner-content {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .card-row-top,
+  .card-row-dashboard-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile-First Adjustments */
+@media (max-width: 768px) {
+  /* Prevent horizontal scrolling on outer container */
+  body, html, .dashboard-container {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  /* Bottom Navigation Bar Layout */
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    padding: 0 1rem;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    background: rgba(13, 19, 14, 0.95);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  }
+  .logo-section {
+    display: none;
+  }
+  .sidebar-footer {
+    display: none;
+  }
+  .nav-menu {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-item {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    gap: 0.4rem;
+  }
+  .nav-item svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Reset main content to stack below */
+  .main-content {
+    margin-left: 0;
+    margin-bottom: 60px;
+    padding: 1.5rem 16px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Scale down heading font sizes */
+  .dashboard-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.4rem;
+  }
+  .dashboard-header p {
+    font-size: 0.95rem;
+  }
+  .streak-card-title {
+    font-size: 1rem;
+  }
+  .challenge-card-title {
+    font-size: 1.5rem;
+  }
+  .impact-banner-title {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+  .emissions-value {
+    font-size: 2.8rem;
+  }
+
+  /* Single column stacking for all layouts */
+  .card-row-top,
+  .card-row-dashboard-top,
+  .grid-challenges,
+  .activity-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  /* Ensure interactive elements occupy 100% width and have 44px+ touch target */
+  .form-select,
+  .form-input {
+    height: 48px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  .btn-save-entry {
+    height: 48px;
+    font-size: 1rem;
+    width: 100%;
+    padding: 0;
+  }
+  .btn-challenge {
+    width: 100%;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-log-activity {
+    width: 100%;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .form-tab-btn {
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+
+  /* Stacked Timeline/Recent Logs Table Card */
+  .recent-logs-table,
+  .recent-logs-table thead,
+  .recent-logs-table tbody,
+  .recent-logs-table th,
+  .recent-logs-table td,
+  .recent-logs-table tr {
+    display: block;
+  }
+  .recent-logs-table thead {
+    display: none; /* Hide standard headers */
+  }
+  .recent-logs-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.01);
+  }
+  .recent-logs-table td {
+    border-bottom: none;
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  }
+  .recent-logs-table td:last-child {
+    border-bottom: none;
+  }
+  .recent-logs-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  /* Banner adapt spacing */
+  .impact-banner-content {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.2rem;
     align-items: flex-start;
+    padding: 1.2rem;
   }
   .impact-banner-title {
     text-align: left;
-    font-size: 2.2rem;
+    max-width: 100%;
+  }
+  .impact-stats-value {
+    font-size: 1.8rem;
+  }
+  .emissions-card {
+    min-height: 280px;
   }
 }
+
+/* AI badge overlay */
+.ai-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  background: rgba(186, 151, 98, 0.95);
+  border: 1px solid var(--border-active);
+  color: #111a13;
+  padding: 0.3rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+

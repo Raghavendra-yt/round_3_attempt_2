@@ -70,18 +70,18 @@ describe("EcoTrack App Dashboard", () => {
   it("renders navigation items", async () => {
     render(<App />);
     await waitFor(() => {
-      expect(screen.getAllByText("Dashboard")[0]).toBeInTheDocument();
+      expect(screen.getAllByText("My Overview")[0]).toBeInTheDocument();
     });
     expect(screen.getByText("Activity Log")).toBeInTheDocument();
-    expect(screen.getByText("Targets")).toBeInTheDocument();
+    expect(screen.getByText("My Goals")).toBeInTheDocument();
   });
 
   it("handles switching between Dashboard and Targets tabs", async () => {
     render(<App />);
-    await waitFor(() => screen.getAllByText("Dashboard")[0]);
+    await waitFor(() => screen.getAllByText("My Overview")[0]);
 
     // Switch to Targets tab
-    const targetsTab = screen.getByText("Targets");
+    const targetsTab = screen.getByText("My Goals");
     fireEvent.click(targetsTab);
 
     expect(screen.getByText("Animated Insights & Habits")).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe("EcoTrack App Dashboard", () => {
 
   it("handles quick log interactions on Dashboard page and reduces emissions", async () => {
     render(<App />);
-    await waitFor(() => screen.getAllByText("Dashboard")[0]);
+    await waitFor(() => screen.getAllByText("My Overview")[0]);
 
     const walkPill = screen.getByText("Logged a walk");
     fireEvent.click(walkPill);
@@ -101,9 +101,9 @@ describe("EcoTrack App Dashboard", () => {
 
   it("handles day streak checkbox interaction on Targets tab", async () => {
     render(<App />);
-    await waitFor(() => screen.getAllByText("Dashboard")[0]);
+    await waitFor(() => screen.getAllByText("My Overview")[0]);
 
-    fireEvent.click(screen.getByText("Targets"));
+    fireEvent.click(screen.getByText("My Goals"));
 
     await waitFor(() => {
       expect(screen.getByText("6")).toBeInTheDocument();
@@ -119,9 +119,9 @@ describe("EcoTrack App Dashboard", () => {
 
   it("handles challenge state completion transitions on Targets tab", async () => {
     render(<App />);
-    await waitFor(() => screen.getAllByText("Dashboard")[0]);
+    await waitFor(() => screen.getAllByText("My Overview")[0]);
 
-    fireEvent.click(screen.getByText("Targets"));
+    fireEvent.click(screen.getByText("My Goals"));
 
     await waitFor(() => screen.getAllByRole("button", { name: "Start Challenge" }));
     const startBtns = screen.getAllByRole("button", { name: "Start Challenge" });
@@ -142,9 +142,9 @@ describe("EcoTrack App Dashboard", () => {
     });
 
     render(<App />);
-    await waitFor(() => screen.getAllByText("Dashboard")[0]);
+    await waitFor(() => screen.getAllByText("My Overview")[0]);
 
-    fireEvent.click(screen.getByText("Targets"));
+    fireEvent.click(screen.getByText("My Goals"));
 
     await waitFor(() => expect(screen.getByText("Level 4")).toBeInTheDocument());
 
@@ -159,7 +159,7 @@ describe("EcoTrack App Dashboard", () => {
 
   it("handles switching to Activity Log and renders initial table and banner values", async () => {
     render(<App />);
-    await waitFor(() => screen.getAllByText("Dashboard")[0]);
+    await waitFor(() => screen.getAllByText("My Overview")[0]);
 
     fireEvent.click(screen.getByText("Activity Log"));
 
@@ -172,7 +172,7 @@ describe("EcoTrack App Dashboard", () => {
 
   it("adds a new transport activity entry, updates table, and recalculates impact banner", async () => {
     render(<App />);
-    await waitFor(() => screen.getAllByText("Dashboard")[0]);
+    await waitFor(() => screen.getAllByText("My Overview")[0]);
 
     fireEvent.click(screen.getByText("Activity Log"));
 
@@ -197,7 +197,7 @@ describe("EcoTrack App Dashboard", () => {
 
   it("deletes a log entry and decreases today's impact", async () => {
     render(<App />);
-    await waitFor(() => screen.getAllByText("Dashboard")[0]);
+    await waitFor(() => screen.getAllByText("My Overview")[0]);
 
     fireEvent.click(screen.getByText("Activity Log"));
     await waitFor(() => screen.getByText("Petrol Car - 15km"));

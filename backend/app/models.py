@@ -44,6 +44,19 @@ class ChallengeState(BaseModel):
     progress: int = 0
 
 
+class StreakUpdate(BaseModel):
+    streak: int = Field(ge=0)
+    xp: int | None = Field(default=None, ge=0)
+    level: int | None = Field(default=None, ge=1)
+
+
+class ChallengeUpdate(BaseModel):
+    status: str
+    progress: int = 0
+    xp: int | None = Field(default=None, ge=0)
+    level: int | None = Field(default=None, ge=1)
+
+
 class UserProfile(BaseModel):
     """A user's profile containing XP and streaks."""
 

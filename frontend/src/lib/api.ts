@@ -1,12 +1,11 @@
+import { getDeviceId } from "./deviceId";
 import type { ActivityLog, ActivityLogCreate, UserProfile } from "./types";
 
 interface ApiError extends Error {
   status: number;
 }
 
-function isApiError(err: unknown): err is ApiError {
-  return err instanceof Error && typeof (err as ApiError).status === "number";
-}
+
 
 async function fetchJson<T>(path: string): Promise<T> {
   const res = await fetch(path);
@@ -34,58 +33,47 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
   return (await res.json()) as T;
 }
 
-function shouldThrow(err: unknown): boolean {
-  if (isApiError(err)) {
-    if (err.status === 404 || err.status === 405) {
-      return false;
-    }
-    return true;
-  }
-  return false;
+
+
+export async function fetchProfile(deviceId: string = getDeviceId()): Promise<UserProfile> {
+  return await fetchJson<UserProfile>(`/api/dashboard/profile/${deviceId}`);
 }
 
-const LOCAL_DEVICE_ID = "local-device-12345";
-
-export async function fetchProfile(deviceId: string = LOCAL_DEVICE_ID): Promise<UserProfile> {
-  try {
-    return await fetchJson<UserProfile>(`/api/dashboard/profile/${deviceId}`);
-  } catch (err: unknown) {
-    if (shouldThrow(err)) throw err;
-    // Fallback if backend is unavailable
-    return {
-      device_id: deviceId,
-      total_emissions: 8500,
-      xp: 0,
-      level: 1,
-      streak: 1,
-      challenges: {},
-    };
-  }
-}
-
-export async function fetchActivities(deviceId: string = LOCAL_DEVICE_ID): Promise<ActivityLog[]> {
-  try {
-    return await fetchJson<ActivityLog[]>(`/api/dashboard/activities/${deviceId}`);
-  } catch (err: unknown) {
-    if (shouldThrow(err)) throw err;
-    return [];
-  }
+export async function fetchActivities(deviceId: string = getDeviceId()): Promise<ActivityLog[]> {
+  return await fetchJson<ActivityLog[]>(`/api/dashboard/activities/${deviceId}`);
 }
 
 export async function logActivity(
   activity: ActivityLogCreate,
-  deviceId: string = LOCAL_DEVICE_ID,
+  deviceId: string = getDeviceId(),
 ): Promise<ActivityLog> {
-  try {
-    return await postJson<ActivityLog>(`/api/dashboard/activities/${deviceId}`, activity);
-  } catch (err: unknown) {
-    if (shouldThrow(err)) throw err;
-    // Fallback if backend is unavailable
-    return {
-      ...activity,
-      id: Math.random().toString(36).substring(7),
-      date: new Date().toISOString(),
-      device_id: deviceId,
-    };
-  }
+  return await postJson<ActivityLog>(`/api/dashboard/activities/${deviceId}`, activity);
+}
+
+export async function updateStreak(
+  streak: number,
+  deviceId: string = getDeviceId(),
+): Promise<UserProfile> {
+  const res = await fetch(`/api/dashboard/profile/${deviceId}/streak`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ streak }),
+  });
+  if (!res.ok) throw new Error(`Failed to update streak (${res.status})`);
+  return await res.json();
+}
+
+export async function updateChallenge(
+  challengeId: string,
+  status: string,
+  progress: number = 0,
+  deviceId: string = getDeviceId(),
+): Promise<UserProfile> {
+  const res = await fetch(`/api/dashboard/profile/${deviceId}/challenges/${challengeId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status, progress }),
+  });
+  if (!res.ok) throw new Error(`Failed to update challenge (${res.status})`);
+  return await res.json();
 }

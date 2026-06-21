@@ -118,3 +118,26 @@ def test_security_headers_present(client):
     assert resp.headers["X-Content-Type-Options"] == "nosniff"
     assert resp.headers["X-Frame-Options"] == "DENY"
     assert "Content-Security-Policy" in resp.headers
+
+
+def test_dashboard_update_streak(client):
+    device_id = "device-streak-123"
+    client.get(f"/api/dashboard/profile/{device_id}")
+    resp = client.put(f"/api/dashboard/profile/{device_id}/streak", json={"streak": 5})
+    assert resp.status_code == 200
+    p = resp.json()
+    assert p["streak"] == 5
+
+
+def test_dashboard_update_challenge(client):
+    device_id = "device-challenge-123"
+    client.get(f"/api/dashboard/profile/{device_id}")
+    resp = client.put(
+        f"/api/dashboard/profile/{device_id}/challenges/cold-water",
+        json={"status": "completed", "progress": 100},
+    )
+    assert resp.status_code == 200
+    p = resp.json()
+    assert p["challenges"]["cold-water"]["status"] == "completed"
+    assert p["challenges"]["cold-water"]["progress"] == 100
+
